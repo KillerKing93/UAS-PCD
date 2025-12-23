@@ -44,6 +44,13 @@ pdf.set_font('Arial', '', 12); pdf.cell(0, 10, 'Disusun Oleh:', 0, 1, 'C')
 pdf.set_font('Arial', 'B', 12)
 pdf.cell(0, 10, 'Nama: Alif Nurhidayat (G1A022073)', 0, 1, 'C')
 pdf.cell(0, 10, 'Informatika - Universitas Bengkulu', 0, 1, 'C')
+
+pdf.ln(10)
+pdf.set_font('Arial', 'U', 10)
+pdf.set_text_color(0, 0, 255)
+pdf.cell(0, 10, 'Repository: https://github.com/KillerKing93/UAS-PCD', 0, 1, 'C', link='https://github.com/KillerKing93/UAS-PCD')
+pdf.set_text_color(0, 0, 0) # Reset color
+
 pdf.add_page()
 
 # Content
