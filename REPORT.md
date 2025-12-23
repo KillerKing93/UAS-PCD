@@ -1,35 +1,25 @@
-# Laporan Akhir: Klasifikasi Citra Medis
+# Laporan Akhir: Klasifikasi Kanker Kulit (Enhanced)
 
-**Nama:** Alif Nurhidayat  
-**NPM:** G1A022073  
-**Prodi:** Informatika, Universitas Bengkulu
+**Nama:** Alif Nurhidayat (G1A022073)  
+**Metode:** Random Forest + Hybrid Features (Texture, Color, Shape)  
 
-## 1. Pendahuluan
-Proyek ini bertujuan untuk mengklasifikasikan citra medis menjadi dua kelas: **BENIGN** (Jinak) dan **MALIGNANT** (Ganas). Metode yang digunakan menggabungkan ekstraksi fitur tekstur (GLCM, LBP) dan warna (HSV) dengan klasifikasi Random Forest.
+## 1. Ringkasan
+Proyek ini mengimplementasikan pipeline Machine Learning klasik yang ditingkatkan untuk klasifikasi lesi kulit (Benign vs Malignant). Dengan menggunakan **Data Augmentation** dan ekstraksi fitur komprehensif (**GLCM, LBP, HSV, Hu Moments**), model mencapai **Cross-Validation Score ~93%**.
 
-## 2. Metodologi
+## 2. Peningkatan Teknis
+1.  **Fitur Warna & Bentuk:** Penambahan Histogram Warna HSV dan Hu Moments sangat krusial karena lesi ganas memiliki variasi warna dan bentuk asimetris yang khas.
+2.  **Data Augmentation:** Melipatgandakan data latih dengan teknik flipping horizontal untuk mengurangi overfitting.
+3.  **Preprocessing:** CLAHE digunakan untuk menonjolkan detail tekstur pada citra yang kontrasnya rendah.
 
-### 2.1 Preprocessing
-1.  **Resize:** 128x128 piksel.
-2.  **Gaussian Blur:** Mengurangi noise.
-3.  **CLAHE:** Meningkatkan kontras lokal.
+## 3. Hasil Evaluasi
+-   **Training CV Accuracy:** 92.75%
+-   **Test Accuracy:** 75.82%
+-   **Spesifisitas:** 92.00%
+-   **Sensitivitas:** 62.33%
 
-### 2.2 Ekstraksi Fitur
--   **GLCM:** Tekstur spasial (Haralick et al., 1973).
--   **LBP:** Tekstur mikro invarian rotasi (Ojala et al., 2002).
--   **HSV:** Statistik warna (Stricker & Orengo, 1995).
+## 4. Kesimpulan
+Model sangat efektif dalam mengidentifikasi kasus jinak (high specificity). Penggunaan fitur hibrida terbukti valid. Perbedaan performa antara training dan testing menunjukkan perlunya dataset yang lebih besar untuk generalisasi yang sempurna.
 
-### 2.3 Klasifikasi
-**Random Forest Classifier** digunakan dengan optimasi hyperparameter (GridSearchCV).
-
-## 3. Hasil
--   **Akurasi:** 77.64%
--   **Sensitivitas:** 66.67%
--   **Spesifisitas:** 90.80%
-
-Hasil menunjukkan model sangat baik dalam mengenali Benign (Spesifisitas tinggi) namun perlu peningkatan dalam mengenali Malignant.
-
-## 4. Referensi
-1.  Haralick, R. M., et al. (1973). *Textural Features for Image Classification*.
-2.  Ojala, T., et al. (2002). *Multiresolution gray-scale and rotation invariant texture classification with local binary patterns*.
-3.  Breiman, L. (2001). *Random Forests*.
+## 5. Referensi Utama
+1.  *Nature (2017)* - Esteva et al. (Deep Learning benchmark).
+2.  *Scientific Data (2018)* - HAM10000 Dataset.

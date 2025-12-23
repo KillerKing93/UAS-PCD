@@ -1,59 +1,30 @@
 --- Training Log ---
---- Starting Classification Pipeline ---
-
-[Step 1] Loading and Preprocessing Data...
+--- Starting Enhanced Classification Pipeline (RF + Augmentation 4x) ---
 Loading data from DATASETS/DATASET 1\TRAIN 1...
   Processing BENIGN: 480 images found.
   Processing MALIGNANT: 500 images found.
 Loading data from DATASETS/DATASET 1\TEST 1...
   Processing BENIGN: 250 images found.
   Processing MALIGNANT: 300 images found.
+Training Data Shape (Augmented): (1960, 105)
+Testing Data Shape: (550, 105)
 
-Training Data Shape: (980, 74)
-Testing Data Shape: (550, 74)
+[Step 3] Training Random Forest Classifier...
+Best Parameters: {'class_weight': 'balanced', 'max_depth': None, 'max_features': 'log2', 'min_samples_leaf': 4, 'n_estimators': 300, 'n_jobs': -1}
+Best Cross-Validation Score: 0.9275
 
-[Step 2] Feature Scaling skipped for Random Forest.
+--- Results ---
+Accuracy: 0.7582
+Sensitivity: 0.6233
+Specificity: 0.9200
 
-[Step 3] Training Random Forest Classifier with Grid Search...
+Report:              precision    recall  f1-score   support
 
-Best Parameters found: {'max_depth': None, 'max_features': 'log2', 'min_samples_leaf': 1, 'min_samples_split': 5, 'n_estimators': 200}
-Best Cross-Validation Score: 0.8919
+      BENIGN       0.67      0.92      0.78       250
+   MALIGNANT       0.90      0.62      0.74       300
 
-Top 15 Feature Importances:
-1. Feature 62 (0.1301)
-2. Feature 64 (0.0725)
-3. Feature 63 (0.0436)
-4. Feature 70 (0.0416)
-5. Feature 0 (0.0337)
-6. Feature 66 (0.0315)
-7. Feature 2 (0.0245)
-8. Feature 3 (0.0237)
-9. Feature 28 (0.0235)
-10. Feature 26 (0.0223)
-11. Feature 6 (0.0222)
-12. Feature 25 (0.0214)
-13. Feature 8 (0.0202)
-14. Feature 4 (0.0198)
-15. Feature 27 (0.0192)
+    accuracy                           0.76       550
+   macro avg       0.79      0.77      0.76       550
+weighted avg       0.80      0.76      0.75       550
 
-[Step 4] Predicting on Test Set...
-
---- Classification Results ---
-Accuracy: 0.7764
-Sensitivity (Recall): 0.6667
-Specificity: 0.9080
-
-Classification Report:
-              precision    recall  f1-score   support
-
-      BENIGN       0.69      0.91      0.79       250
-   MALIGNANT       0.90      0.67      0.76       300
-
-    accuracy                           0.78       550
-   macro avg       0.80      0.79      0.78       550
-weighted avg       0.80      0.78      0.77       550
-
-Confusion matrix saved to confusion_matrix.png
-
-Preprocessing logs saved to preprocessing_logs
-Training log saved to training_log.txt
+Confusion matrix saved. Pipeline complete.
