@@ -1,17 +1,18 @@
-Accuracy: 0.7636
-Sensitivity: 0.7333
-Specificity: 0.8000
+Accuracy: 0.7764
+Sensitivity: 0.6667
+Specificity: 0.9080
+Best Params: {'max_depth': None, 'max_features': 'log2', 'min_samples_leaf': 1, 'min_samples_split': 5, 'n_estimators': 200}
 
 Confusion Matrix:
-[[200  50]
- [ 80 220]]
+[[227  23]
+ [100 200]]
 
 Report:
               precision    recall  f1-score   support
 
-      BENIGN       0.71      0.80      0.75       250
-   MALIGNANT       0.81      0.73      0.77       300
+      BENIGN       0.69      0.91      0.79       250
+   MALIGNANT       0.90      0.67      0.76       300
 
-    accuracy                           0.76       550
-   macro avg       0.76      0.77      0.76       550
-weighted avg       0.77      0.76      0.76       550
+    accuracy                           0.78       550
+   macro avg       0.80      0.79      0.78       550
+weighted avg       0.80      0.78      0.77       550

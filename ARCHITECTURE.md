@@ -2,48 +2,33 @@
 
 ## Pipeline Overview
 
-The system follows a standard Computer Vision / Machine Learning pipeline:
-
 ```mermaid
 graph LR
     A[Input Image] --> B[Preprocessing]
     B --> C[Feature Extraction]
-    C --> D[Classification]
+    C --> D[Classification (Random Forest)]
     D --> E[Evaluation]
 ```
 
 ## Detailed Components
 
 ### 1. Preprocessing
-- **Input:** Raw RGB images from `DATASETS/DATASET 1`.
-- **Resize:** All images are resized to a fixed resolution of **128x128 pixels**.
-- **Gaussian Blur:** Applied with a (5, 5) kernel to reduce high-frequency noise.
-- **Color Space Conversion:** Images are converted from **BGR to Grayscale**. Texture analysis using GLCM is strictly defined for single-channel intensity images.
+-   **Resize:** 128x128 pixels.
+-   **Gaussian Blur:** (5,5) kernel for noise reduction.
+-   **CLAHE:** Contrast Limited Adaptive Histogram Equalization (Clip Limit=2.0) applied to the grayscale image to enhance local texture details.
 
-### 2. Feature Extraction (GLCM)
-We use the **Gray Level Co-occurrence Matrix (GLCM)** to describe the texture of the images.
-- **Library:** `skimage.feature.graycomatrix`, `skimage.feature.graycoprops`.
-- **Parameters:**
-    - **Distances:** 1 pixel.
-    - **Angles:** 0, 45, 90, 135 degrees (0, $\pi/4$, $\pi/2$, $3\pi/4$ radians).
-    - **Levels:** 256 (standard 8-bit depth).
-- **Features Extracted (6 per image):**
-    1.  **Contrast:** Measures local variations in the GLCM.
-    2.  **Dissimilarity:** Measure of how different the elements of the matrix are.
-    3.  **Homogeneity:** Measures the closeness of the distribution of elements in the GLCM to the GLCM diagonal.
-    4.  **Energy:** Sum of squared elements in the GLCM.
-    5.  **Correlation:** Measures the joint probability occurrence of the specified pixel pairs.
-    6.  **ASM (Angular Second Moment):** Measure of textural uniformity.
-- **Aggregation:** The properties are calculated for each angle and then averaged to produce a rotation-invariant feature vector.
+### 2. Feature Extraction
+A robust feature vector of **74 dimensions** is constructed from:
+-   **GLCM (Texture):** 6 properties (Contrast, Dissimilarity, Homogeneity, Energy, Correlation, ASM) calculated at 3 distances (1, 2, 3) and averaged over 4 angles.
+-   **LBP (Texture):** Uniform Local Binary Patterns (Radius=3, Points=24). Histogram of LBP codes is used as features.
+-   **HSV (Color):** Statistical moments (Mean, Standard Deviation, Skewness, Kurtosis) extracted from Hue, Saturation, and Value channels of the resized original image.
 
-### 3. Classification (SVM)
-- **Algorithm:** **Support Vector Machine (SVM)**.
-- **Kernel:** **RBF (Radial Basis Function)**, suitable for non-linear data separation.
-- **Scaling:** Data is normalized using `StandardScaler` (Zero Mean, Unit Variance) before feeding into the SVM, which is critical for distance-based algorithms like SVM.
+### 3. Classification
+-   **Algorithm:** **Random Forest Classifier**.
+-   **Reasoning:** Handles high-dimensional data well, robust to noise, and provides feature importance.
+-   **Optimization:** GridSearchCV used to find optimal `n_estimators`, `max_depth`, and `min_samples_split`.
 
-### 4. Evaluation
-- **Metrics:**
-    - **Accuracy:** Overall correctness.
-    - **Sensitivity (Recall):** Ability to correctly identify Malignant cases.
-    - **Specificity:** Ability to correctly identify Benign cases.
-- **Visualization:** Confusion Matrix heatmap.
+### 4. Evaluation Metrics
+-   **Accuracy:** Overall correctness.
+-   **Sensitivity (Recall):** Ability to detect Malignant cases.
+-   **Specificity:** Ability to detect Benign cases.
