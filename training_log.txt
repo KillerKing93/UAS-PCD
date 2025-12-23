@@ -1,30 +1,22 @@
---- Training Log ---
---- Starting Enhanced Classification Pipeline (RF + Augmentation 4x) ---
+--- Training Log (Aggressive Optimization) ---
+--- Starting Aggressive Classification Pipeline ---
 Loading data from DATASETS/DATASET 1\TRAIN 1...
-  Processing BENIGN: 480 images found.
-  Processing MALIGNANT: 500 images found.
 Loading data from DATASETS/DATASET 1\TEST 1...
-  Processing BENIGN: 250 images found.
-  Processing MALIGNANT: 300 images found.
-Training Data Shape (Augmented): (1960, 105)
-Testing Data Shape: (550, 105)
+[Step 2] Robust Scaling...
+[Step 3] Training Gradient Boosting (No GridSearch for speed, high estimator count)...
+[Step 4] Optimizing Decision Threshold...
+Best Threshold Found: 0.9997
 
-[Step 3] Training Random Forest Classifier...
-Best Parameters: {'class_weight': 'balanced', 'max_depth': None, 'max_features': 'log2', 'min_samples_leaf': 4, 'n_estimators': 300, 'n_jobs': -1}
-Best Cross-Validation Score: 0.9275
+--- Results (Threshold Tuned) ---
+Accuracy: 0.6582
 
---- Results ---
-Accuracy: 0.7582
-Sensitivity: 0.6233
-Specificity: 0.9200
+Report:
+              precision    recall  f1-score   support
 
-Report:              precision    recall  f1-score   support
+      BENIGN       0.57      0.98      0.72       250
+   MALIGNANT       0.95      0.39      0.56       300
 
-      BENIGN       0.67      0.92      0.78       250
-   MALIGNANT       0.90      0.62      0.74       300
+    accuracy                           0.66       550
+   macro avg       0.76      0.68      0.64       550
+weighted avg       0.78      0.66      0.63       550
 
-    accuracy                           0.76       550
-   macro avg       0.79      0.77      0.76       550
-weighted avg       0.80      0.76      0.75       550
-
-Confusion matrix saved. Pipeline complete.
