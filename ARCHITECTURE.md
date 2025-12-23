@@ -16,7 +16,8 @@ graph LR
 
 ### 1. Preprocessing
 - **Input:** Raw RGB images from `DATASETS/DATASET 1`.
-- **Resize:** All images are resized to a fixed resolution of **128x128 pixels** to ensure feature vector consistency.
+- **Resize:** All images are resized to a fixed resolution of **128x128 pixels**.
+- **Gaussian Blur:** Applied with a (5, 5) kernel to reduce high-frequency noise.
 - **Color Space Conversion:** Images are converted from **BGR to Grayscale**. Texture analysis using GLCM is strictly defined for single-channel intensity images.
 
 ### 2. Feature Extraction (GLCM)

@@ -1,17 +1,17 @@
-Accuracy: 0.7345
-Sensitivity: 0.7233
-Specificity: 0.7480
+Accuracy: 0.7636
+Sensitivity: 0.7333
+Specificity: 0.8000
 
 Confusion Matrix:
-[[187  63]
- [ 83 217]]
+[[200  50]
+ [ 80 220]]
 
 Report:
               precision    recall  f1-score   support
 
-      BENIGN       0.69      0.75      0.72       250
-   MALIGNANT       0.78      0.72      0.75       300
+      BENIGN       0.71      0.80      0.75       250
+   MALIGNANT       0.81      0.73      0.77       300
 
-    accuracy                           0.73       550
-   macro avg       0.73      0.74      0.73       550
-weighted avg       0.74      0.73      0.74       550
+    accuracy                           0.76       550
+   macro avg       0.76      0.77      0.76       550
+weighted avg       0.77      0.76      0.76       550

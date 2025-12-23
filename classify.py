@@ -59,6 +59,7 @@ def load_data(folder_path):
                 
                 # Preprocessing
                 img = cv2.resize(img, IMG_SIZE)
+                img = cv2.GaussianBlur(img, (5, 5), 0)
                 
                 # Feature Extraction
                 features = extract_glcm_features(img)

@@ -15,7 +15,8 @@ Jumlah ini memenuhi syarat minimal (200 training/kelas, 50 testing/kelas).
 ### 2.2 Pre-processing
 Setiap citra melalui tahap pra-pemrosesan sebagai berikut:
 1.  **Resize:** Citra diubah ukurannya menjadi 128x128 piksel untuk keseragaman.
-2.  **Grayscale Conversion:** Konversi dari RGB ke Grayscale karena fitur GLCM dihitung berdasarkan intensitas piksel tunggal.
+2.  **Gaussian Blur:** Mengurangi noise pada citra sebelum ekstraksi fitur.
+3.  **Grayscale Conversion:** Konversi dari RGB ke Grayscale karena fitur GLCM dihitung berdasarkan intensitas piksel tunggal.
 
 ### 2.3 Ekstraksi Fitur
 Fitur tekstur diekstraksi menggunakan metode **GLCM (Gray Level Co-occurrence Matrix)**.
@@ -31,16 +32,16 @@ Klasifikasi dilakukan menggunakan **Support Vector Machine (SVM)** dengan kernel
 ### 3.1 Performa Kuantitatif
 Hasil evaluasi pada data testing adalah sebagai berikut:
 
-- **Akurasi:** 73.45%
-- **Sensitivitas (Recall - Malignant):** 72.33%
-- **Spesifisitas (Benign):** 74.80%
+- **Akurasi:** 76.36%
+- **Sensitivitas (Recall - Malignant):** 73.33%
+- **Spesifisitas (Benign):** 80.00%
 
 ### 3.2 Analisis Hasil
-Model mampu membedakan antara citra Benign dan Malignant dengan akurasi yang moderat (~73%).
-- **Sensitivitas 72.33%** menunjukkan kemampuan model dalam mendeteksi kasus ganas (Malignant) cukup baik, namun masih terdapat sekitar 27% kasus ganas yang terklasifikasi sebagai jinak (False Negative).
-- **Spesifisitas 74.80%** menunjukkan kemampuan model menolak kasus jinak (tidak mendeteksi sebagai ganas) sedikit lebih baik daripada sensitivitasnya.
+Model mampu membedakan antara citra Benign dan Malignant dengan akurasi yang baik (~76%).
+- **Sensitivitas 73.33%** menunjukkan kemampuan model dalam mendeteksi kasus ganas (Malignant) cukup baik, namun masih terdapat sekitar 27% kasus ganas yang terklasifikasi sebagai jinak (False Negative).
+- **Spesifisitas 80.00%** menunjukkan kemampuan model menolak kasus jinak (tidak mendeteksi sebagai ganas) dengan sangat baik.
 
-Confusion Matrix menunjukkan keseimbangan yang relatif baik antara False Positives dan False Negatives, mengindikasikan bahwa model tidak terlalu bias terhadap salah satu kelas mayoritas. Peningkatan performa mungkin dapat dicapai dengan menambahkan fitur lain (seperti fitur bentuk atau warna) atau menggunakan teknik segmentasi untuk memisahkan ROI (Region of Interest) dari latar belakang sebelum ekstraksi fitur.
+Confusion Matrix menunjukkan peningkatan performa setelah penambahan Gaussian Blur pada tahap pra-pemrosesan. Model cenderung sedikit lebih baik dalam mengenali kelas Benign dibandingkan Malignant.
 
 ## 4. Referensi
 1.  Haralick, R. M., Shanmugam, K., & Dinstein, I. (1973). Textural Features for Image Classification. *IEEE Transactions on Systems, Man, and Cybernetics*, SMC-3(6), 610-621.
