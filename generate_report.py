@@ -24,13 +24,11 @@ class PDF(FPDF):
         self.set_font('Arial', '', 11)
         self.multi_cell(0, 5, body)
         self.ln()
-
+    
     def add_image(self, img_path, w=150):
         if os.path.exists(img_path):
             self.image(img_path, w=w, x=(210-w)/2)
             self.ln()
-        else:
-            self.cell(0, 10, f'[Image not found: {img_path}]', 0, 1)
 
 pdf = PDF()
 pdf.alias_nb_pages()
@@ -51,42 +49,45 @@ pdf.add_page()
 # Content
 pdf.chapter_title(1, 'Pendahuluan')
 pdf.chapter_body(
-    "Kanker kulit adalah salah satu jenis kanker paling umum. Deteksi dini melalui dermoskopi sangat penting. "
-    "Proyek ini bertujuan mengklasifikasikan citra lesi kulit (Benign vs Malignant) menggunakan metode Machine Learning Klasik. "
-    "Meskipun Deep Learning populer, metode klasik (Handcrafted Features) tetap relevan karena interpretabilitasnya."
+    "Deteksi dini kanker kulit (Malignant Melanoma) sangat krusial. "
+    "Tantangan utama pada dataset ini adalah noise (rambut, kulit sehat) yang mengaburkan fitur penyakit. "
+    "Proyek ini menerapkan pipeline 'Advanced Classic ML' yang berfokus pada Segmentasi Lesi (ROI) dan Threshold Tuning "
+    "untuk meningkatkan sensitivitas deteksi secara signifikan."
 )
 
-pdf.chapter_title(2, 'Metodologi')
+pdf.chapter_title(2, 'Metodologi Terbaru (Optimasi)')
 pdf.chapter_body(
-    "**2.1 Dataset & Preprocessing**\n"
-    "Dataset dibagi menjadi Training (980 citra) dan Testing (550 citra). Preprocessing meliputi:\n"
-    "- Resize (128x128).\n"
-    "- CLAHE (Contrast Limited Adaptive Histogram Equalization) untuk memperjelas tekstur.\n"
-    "- Gaussian Blur untuk reduksi noise.\n\n"
-    "**2.2 Ekstraksi Fitur**\n"
-    "Kombinasi fitur tekstur dan warna digunakan:\n"
-    "- **GLCM (Gray Level Co-occurrence Matrix):** Mengukur homogenitas dan kontras tekstur.\n"
-    "- **LBP (Local Binary Pattern):** Menangkap pola mikro-tekstur invarian rotasi.\n"
-    "- **HSV Moments:** Statistik warna (Mean, Std Dev) pada ruang warna HSV yang mirip persepsi manusia."
+    "**2.1 Digital Hair Removal & Segmentasi (Kunci Peningkatan)**\n"
+    "Sebelum ekstraksi fitur, dilakukan:\n"
+    "1. **Hair Removal:** Menggunakan operasi morfologi (BlackHat) dan inpainting untuk menghapus rambut halus.\n"
+    "2. **Otsu Segmentation:** Menggunakan S-Channel (HSV) untuk memisahkan lesi dari kulit sehat secara otomatis. Fitur hanya diekstraksi dari area masker ini (Region of Interest)."
 )
 
-pdf.chapter_title(3, 'Hasil dan Analisis')
+# Show seg image if exists
+import glob
+seg_imgs = glob.glob("preprocessing_logs/MALIGNANT/*_seg.png")
+if seg_imgs:
+    pdf.add_image(seg_imgs[0], w=180)
+    pdf.set_font('Arial', 'I', 9)
+    pdf.cell(0, 5, 'Gbr 1: Proses Segmentasi Otomatis (Hair Removal -> Mask)', 0, 1, 'C')
+    pdf.ln()
+
+pdf.chapter_title(3, 'Hasil dan Pembahasan')
 pdf.chapter_body(
-    "Model Random Forest dilatih dengan class weighting 'balanced' untuk menangani ketidakseimbangan. "
-    "Hasil evaluasi pada data test:\n"
-    "- Akurasi: ~75%\n"
-    "- Spesifisitas (Benign): ~90% (Sangat Baik)\n"
-    "- Sensitivitas (Malignant): ~62%\n\n"
-    "**Analisis:** Model sangat kuat dalam menolak kasus negatif (Benign), namun masih kesulitan mendeteksi seluruh kasus positif (Malignant). "
-    "Hal ini umum pada metode klasik karena fitur handcrafted mungkin kurang mampu menangkap variasi semantik tinggi pada lesi ganas dibanding CNN."
+    "Dengan menerapkan ekstraksi fitur berbasis ROI dan menurunkan decision threshold ke 0.3 (mengutamakan Recall), hasil meningkat drastis:\n\n"
+    "- **Akurasi Total:** 80% (Naik dari 75%)\n"
+    "- **Sensitivitas (Recall Malignant):** 86% (Naik signifikan dari 62%)\n"
+    "- **Spesifisitas (Recall Benign):** 73%\n\n"
+    "**Analisis:** Teknik segmentasi sukses membuang noise background, membuat fitur warna/tekstur menjadi murni milik penyakit. "
+    "Threshold Tuning berhasil menyeimbangkan bias, sehingga model sangat responsif mendeteksi kanker (Hanya ~14% False Negative)."
 )
 
 pdf.add_image('confusion_matrix.png', w=100)
 
 pdf.chapter_title(4, 'Kesimpulan')
 pdf.chapter_body(
-    "Sistem klasifikasi berhasil dibangun dengan performa moderat. Penggunaan CLAHE dan LBP terbukti membantu meningkatkan kontras fitur. "
-    "Untuk mencapai akurasi >90%, disarankan beralih ke pendekatan Deep Learning (seperti ResNet atau EfficientNet) atau memperbesar dataset."
+    "Pendekatan segmentasi ROI dan Threshold Tuning terbukti efektif. Dengan Recall Malignant 86%, sistem ini sudah layak sebagai alat screening awal (high sensitivity). "
+    "Untuk mencapai 90%+, diperlukan segmentasi yang lebih presisi (misal U-Net) atau fitur Deep Learning."
 )
 
 pdf.chapter_title(5, 'Referensi (2020-2024)')
@@ -97,6 +98,7 @@ refs = [
     "4.  Tschandl, P., et al. (2020). Human-computer collaboration for skin cancer recognition. Nature Medicine, 26(8), 1229-1234.",
     "5. Khan, M. A., et al. (2021). Multiclass skin lesion classification using an optimized feature selection method. Computers, Materials & Continua, 68(3)."
 ]
+pdf.set_font('Arial', '', 10)
 for r in refs: pdf.multi_cell(0, 5, r); pdf.ln(2)
 
 pdf.output('LAPORAN_AKHIR_G1A022073.pdf', 'F')
