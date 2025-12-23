@@ -1,18 +1,15 @@
 # Project Context: Skin Cancer Classification
 
-**Status:** Completed (Phase 2 Enhanced)
-**Last Action:** Generated Final Report with ~93% CV Accuracy.
+**Status:** Completed (Phase 3 - Segmentation & ROI)
+**Last Action:** Updated all documentation to reflect the final segmentation-based pipeline.
 
 ## Key Components
-1.  **Preprocessing:** Resize (128px) -> Gray -> Gaussian Blur -> CLAHE.
-2.  **Augmentation:** Horizontal Flipping (Train set only).
-3.  **Features:** 
-    -   Texture: GLCM (Contrast, etc.) + LBP.
-    -   Color: HSV Statistics + Histograms.
-    -   Shape: Hu Moments.
-4.  **Model:** Random Forest (Optimized with GridSearch).
+1.  **Segmentation:** Hair Removal -> Otsu Masking.
+2.  **Features:** ROI-based Color (HSV, Lab), Texture (LBP, GLCM), Shape.
+3.  **Model:** Random Forest (500 estimators).
+4.  **Optimization:** Decision Threshold Tuning (0.3).
 
 ## Artifacts
--   `LAPORAN_AKHIR_G1A022073.pdf`: The final submission document.
--   `training_log.txt`: Detailed training logs.
--   `preprocessing_logs/`: Visuals of the pipeline.
+-   `classify.py`: The segmentation and classification logic.
+-   `generate_report.py`: Report generator.
+-   `LAPORAN_AKHIR_G1A022073.pdf`: The submitted report.
